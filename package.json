@@ -1,0 +1,18 @@
+{
+  "name": "auratutor-adaptive-learning",
+  "version": "1.0.0",
+  "description": "Emotion-Aware Adaptive Learning Assistant with Neumorphic UI & behavioral biometrics",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y http-server -p 3000"
+  },
+  "keywords": [
+    "education",
+    "hackathon",
+    "neumorphism",
+    "adaptive-learning",
+    "biometrics"
+  ],
+  "author": "Hackathon Team",
+  "license": "MIT"
+}
