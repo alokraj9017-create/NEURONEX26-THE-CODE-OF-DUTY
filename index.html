@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraTutor - Emotion-Aware Adaptive Learning Assistant</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- App Styling -->
+    <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body class="state-focused">
+    <!-- Global Ambient Glow overlay representing emotional state -->
+    <div id="ambient-glow" class="glow-focused"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="material-icons-round brand-icon">psychology</span>
+                <span class="brand-text">AuraTutor</span>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-view="dashboard" id="nav-dashboard">
+                    <span class="material-icons-round">dashboard</span>
+                    <span class="nav-label">Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="tutor" id="nav-tutor">
+                    <span class="material-icons-round">school</span>
+                    <span class="nav-label">Smart Tutor</span>
+                </button>
+                <button class="nav-item" data-view="planner" id="nav-planner">
+                    <span class="material-icons-round">calendar_today</span>
+                    <span class="nav-label">Adaptive Planner</span>
+                </button>
+                <button class="nav-item" data-view="analytics" id="nav-analytics">
+                    <span class="material-icons-round">analytics</span>
+                    <span class="nav-label">Progress Analytics</span>
+                </button>
+                <button class="nav-item" data-view="achievements" id="nav-achievements">
+                    <span class="material-icons-round">emoji_events</span>
+                    <span class="nav-label">Achievements</span>
+                </button>
+            </nav>
+
+            <!-- API Key Neumorphic Drawer -->
+            <div class="api-settings-panel neumorphic-inset" style="padding: 12px; margin-top: 15px; margin-bottom: 15px; border-radius: var(--border-radius-sm); font-size: 11px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-weight: 700; color: var(--text-secondary);">
+                    <span>Live Gemini AI</span>
+                    <span class="material-icons-round" style="font-size: 16px; cursor: pointer; color: var(--accent-color);" id="toggle-api-drawer" title="Toggle API Settings">settings</span>
+                </div>
+                <div id="api-drawer-content" style="display: none; flex-direction: column; gap: 8px; margin-top: 8px;">
+                    <input type="password" id="gemini-api-key" placeholder="Paste Gemini API Key..." style="width: 100%; border: none; padding: 8px 10px; border-radius: 6px; font-size: 10px; background-color: var(--bg-color);" class="neumorphic-inset">
+                    <span style="font-size: 8px; color: var(--text-tertiary); line-height: 1.2;">Your key is saved locally in your browser. If empty, AuraTutor falls back to local NLP logic.</span>
+                </div>
+            </div>
+
+            <div class="user-profile-summary">
+                <div class="avatar-circle">
+                    <span class="material-icons-round">face</span>
+                </div>
+                <div class="user-info">
+                    <div class="username" id="user-name">Alex Miller</div>
+                    <div class="user-rank" id="user-level-badge">Level 4 Scholar</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="app-header">
+                <div class="header-left">
+                    <h1 id="view-title">Dashboard</h1>
+                    <p class="header-subtitle" id="view-subtitle">Welcome back! Ready to unlock your brain's potential today?</p>
+                </div>
+                
+                <div class="header-right">
+                    <!-- Global State Tracker Widget (CRITICAL FOR HACKATHON DEMO) -->
+                    <div class="telemetry-badge-container neumorphic-inset">
+                        <div class="status-indicator-dot pulse-focused" id="state-indicator-dot"></div>
+                        <div class="telemetry-text">
+                            <span class="label">Cognitive State</span>
+                            <span class="value" id="current-state-text">Focused & Balanced</span>
+                        </div>
+                    </div>
+
+                    <!-- Streak & XP Quick Indicators -->
+                    <div class="stats-indicators">
+                        <div class="indicator-item tooltip" data-tooltip="Daily Learning Streak">
+                            <span class="material-icons-round icon-orange">local_fire_department</span>
+                            <span class="indicator-val" id="streak-counter-top">5 Days</span>
+                        </div>
+                        <div class="indicator-item tooltip" data-tooltip="Total Focus XP">
+                            <span class="material-icons-round icon-blue">bolt</span>
+                            <span class="indicator-val" id="xp-counter-top">1,420 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div class="view-panel-container">
+
+                <!-- 1. DASHBOARD VIEW -->
+                <section class="view-panel active" id="view-dashboard">
+                    <div class="dashboard-grid">
+                        <!-- Left Main Column -->
+                        <div class="grid-col-8">
+                            <!-- Hero State Card -->
+                            <div class="dashboard-hero neumorphic-card">
+                                <div class="hero-content">
+                                    <span class="badge badge-accent" id="state-chip">Cognitive Sync Active</span>
+                                    <h2>Your current focus score is <span class="highlight-blue" id="focus-percentage">88%</span></h2>
+                                    <p>Based on your response times and accuracy, your mental processing is highly structured. You are in the optimal cognitive zone for hard math concepts.</p>
+                                    
+                                    <div class="hero-actions">
+                                        <button class="btn btn-primary" onclick="window.app.switchView('tutor')">
+                                            <span class="material-icons-round">play_arrow</span> Resume Learning Session
+                                        </button>
+                                        <button class="btn btn-secondary" onclick="window.app.switchView('planner')">
+                                            View Study Plan
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="hero-visual">
+                                    <!-- Neumorphic state ring visualization -->
+                                    <div class="cognitive-ring-container">
+                                        <svg class="cognitive-ring" width="140" height="140">
+                                            <circle class="ring-bg" cx="70" cy="70" r="55"></circle>
+                                            <circle class="ring-progress" id="cognitive-ring-progress" cx="70" cy="70" r="55"></circle>
+                                        </svg>
+                                        <div class="ring-label-overlay">
+                                            <span class="material-icons-round ring-icon" id="state-card-icon">psychology</span>
+                                            <span class="ring-text" id="state-card-text">Focused</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Metrics & Streaks row -->
+                            <div class="metrics-row">
+                                <div class="metric-card neumorphic-card">
+                                    <div class="metric-icon-wrapper blue">
+                                        <span class="material-icons-round">timer</span>
+                                    </div>
+                                    <div class="metric-data">
+                                        <h3>Focus Time</h3>
+                                        <p class="metric-value" id="focus-time-metric">32m <span class="sub">/ 45m</span></p>
+                                        <div class="mini-progress-bar neumorphic-inset">
+                                            <div class="progress-fill" style="width: 71%;" id="focus-time-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="metric-card neumorphic-card">
+                                    <div class="metric-icon-wrapper green">
+                                        <span class="material-icons-round">check_circle</span>
+                                    </div>
+                                    <div class="metric-data">
+                                        <h3>Accuracy Rate</h3>
+                                        <p class="metric-value" id="accuracy-metric">84%</p>
+                                        <div class="mini-progress-bar neumorphic-inset">
+                                            <div class="progress-fill fill-green" style="width: 84%;" id="accuracy-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="metric-card neumorphic-card">
+                                    <div class="metric-icon-wrapper orange">
+                                        <span class="material-icons-round">military_tech</span>
+                                    </div>
+                                    <div class="metric-data">
+                                        <h3>Session XP</h3>
+                                        <p class="metric-value" id="session-xp-metric">+180 XP</p>
+                                        <div class="mini-progress-bar neumorphic-inset">
+                                            <div class="progress-fill fill-orange" style="width: 60%;" id="session-xp-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Today's Adaptive Agenda -->
+                            <div class="agenda-section neumorphic-card">
+                                <h3 class="section-title">
+                                    <span class="material-icons-round">list_alt</span> Today's Adaptive Agenda
+                                </h3>
+                                <p class="section-subtitle">Based on your learning habits, the assistant has prioritized these activities for today.</p>
+                                
+                                <div class="agenda-list" id="dashboard-agenda-list">
+                                    <!-- Rendered dynamically by planner.js -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Sidebar Column -->
+                        <div class="grid-col-4">
+                            <!-- Progress Overview -->
+                            <div class="dashboard-side-card neumorphic-card">
+                                <h3>Active Learning Goal</h3>
+                                <div class="active-course-header">
+                                    <div class="course-icon">
+                                        <span class="material-icons-round">code</span>
+                                    </div>
+                                    <div class="course-text">
+                                        <h4 id="active-course-title">Binary Search Trees</h4>
+                                        <p id="active-course-subtitle">Level: Intermediate</p>
+                                    </div>
+                                </div>
+                                <div class="course-progress-details">
+                                    <div class="progress-labels">
+                                        <span>Course Completion</span>
+                                        <span id="course-percentage-text">45%</span>
+                                    </div>
+                                    <div class="progress-bar-large neumorphic-inset">
+                                        <div class="progress-fill-large" style="width: 45%;" id="course-progress-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Real-time Bio-Telemetry Monitor (Judge pleaser) -->
+                            <div class="dashboard-side-card neumorphic-card">
+                                <h3>Bio-Telemetry Emulator</h3>
+                                <p class="card-desc">Simulated sensory signals from learner behavior tracking rules.</p>
+                                
+                                <div class="telemetry-grid">
+                                    <div class="telemetry-item">
+                                        <span class="telemetry-label">Response Pace</span>
+                                        <span class="telemetry-value text-green" id="telemetry-pace">Optimal (12s)</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <span class="telemetry-label">Idle Inactivity</span>
+                                        <span class="telemetry-value text-blue" id="telemetry-idle">Active (3s)</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <span class="telemetry-label">Consecutive Errors</span>
+                                        <span class="telemetry-value text-green" id="telemetry-errors">0 Errors</span>
+                                    </div>
+                                    <div class="telemetry-item">
+                                        <span class="telemetry-label">Hint Dependence</span>
+                                        <span class="telemetry-value text-yellow" id="telemetry-hints">Low (1/session)</span>
+                                    </div>
+                                </div>
+
+                                <div class="telemetry-logs-window neumorphic-inset">
+                                    <div class="telemetry-log-title">State Updates Feed:</div>
+                                    <div class="telemetry-logs" id="telemetry-logs-feed">
+                                        <div class="log-entry">[17:20:11] Session initialized. State: Focused</div>
+                                        <div class="log-entry">[17:22:30] Accuracy check: 100%. Difficulty bumped.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gamification Level Up Card -->
+                            <div class="dashboard-side-card neumorphic-card gamification-card">
+                                <div class="level-progress-wrapper">
+                                    <div class="level-badge">4</div>
+                                    <div class="xp-progress-details">
+                                        <div class="xp-labels">
+                                            <span>Rank: Scholar</span>
+                                            <span><strong id="current-xp">420</strong>/1000 XP</span>
+                                        </div>
+                                        <div class="progress-bar-large neumorphic-inset">
+                                            <div class="progress-fill-large fill-purple" style="width: 42%;" id="xp-progress-bar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="unlocked-stats">
+                                    <span>Badges: <strong id="badge-count-side">3/8</strong></span>
+                                    <span>Current Level: <strong id="user-level-text">Scholar II</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 2. SMART TUTOR VIEW -->
+                <section class="view-panel" id="view-tutor">
+                    <div class="tutor-layout">
+                        <!-- Left Panel: State Dashboard & Topic Index -->
+                        <div class="tutor-side-panel neumorphic-card">
+                            <h3>Session Monitor</h3>
+                            <div class="mini-telemetry-badge neumorphic-inset" id="tutor-telemetry-status-box">
+                                <div class="indicator-glow" id="tutor-status-glow"></div>
+                                <div class="telemetry-sub-info">
+                                    <div class="telemetry-title" id="tutor-telemetry-state-title">FOCUSED STATE</div>
+                                    <div class="telemetry-desc" id="tutor-telemetry-state-desc">Pacing optimal. Engaging with standard curriculum.</div>
+                                </div>
+                            </div>
+
+                            <div class="tutor-concept-progress">
+                                <h4>Learning Modules</h4>
+                                <div class="concept-steps" id="tutor-concept-steps-list">
+                                    <!-- Rendered dynamically by tutor.js -->
+                                </div>
+                            </div>
+
+                            <div class="tutor-actions-box">
+                                <button class="btn btn-secondary w-100" id="btn-force-struggle" style="font-size: 11px; padding: 6px;">
+                                    Demo: Simulate Confusion State
+                                </button>
+                                <button class="btn btn-secondary w-100 mt-1" id="btn-force-bored" style="font-size: 11px; padding: 6px;">
+                                    Demo: Simulate Inactivity State
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Main Chat Panel -->
+                        <div class="tutor-chat-panel neumorphic-card">
+                            <div class="chat-header">
+                                <div class="tutor-identity">
+                                    <div class="tutor-avatar neumorphic-inset-avatar">
+                                        <span class="material-icons-round icon-blue">psychology</span>
+                                    </div>
+                                    <div class="tutor-name-info">
+                                        <h4>Aura AI Assistant</h4>
+                                        <p class="status-online">Adaptive Tutor Engine (Online)</p>
+                                    </div>
+                                </div>
+                                <div class="concept-breadcrumb" id="tutor-breadcrumb">BST: Search Operations</div>
+                            </div>
+
+                            <!-- Chat Messages Scroll Container -->
+                            <div class="chat-messages neumorphic-inset" id="chat-messages-container">
+                                <!-- Messages rendered dynamically by tutor.js -->
+                            </div>
+
+                            <!-- User Input Area -->
+                            <div class="chat-input-area">
+                                <div class="hint-bar" id="tutor-hint-bar" style="display: none;">
+                                    <span class="material-icons-round text-yellow">lightbulb</span>
+                                    <span class="hint-text" id="tutor-hint-text"></span>
+                                    <button class="btn btn-small" id="btn-next-hint">More Help</button>
+                                </div>
+                                
+                                <div class="chat-controls">
+                                    <div class="options-container" id="chat-options-container">
+                                        <!-- Buttons for multiple choice options loaded dynamically -->
+                                    </div>
+
+                                    <div class="custom-input-box" id="chat-text-input-container">
+                                        <input type="text" class="input-text neumorphic-inset" id="chat-text-input" placeholder="Ask your tutor anything (e.g. 'Explain Recursion', 'What is gravity?')...">
+                                        <button class="btn btn-primary btn-icon" id="btn-send-chat">
+                                            <span class="material-icons-round">send</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="utility-row">
+                                        <button class="btn btn-secondary tooltip" id="btn-request-hint" data-tooltip="Need a hint? Adapts explanation">
+                                            <span class="material-icons-round">lightbulb</span> Help Me / Hint
+                                        </button>
+                                        <button class="btn btn-secondary tooltip" id="btn-skip-topic" data-tooltip="Skip to next section">
+                                            Skip Concept <span class="material-icons-round">skip_next</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 3. ADAPTIVE PLANNER VIEW -->
+                <section class="view-panel" id="view-planner">
+                    <div class="planner-layout">
+                        <!-- Left Panel: Spaced Repetition agenda generator -->
+                        <div class="planner-agenda-card neumorphic-card">
+                            <div class="planner-card-header">
+                                <h3>Smart Study Generator</h3>
+                                <button class="btn btn-secondary btn-small" id="btn-regenerate-planner">
+                                    <span class="material-icons-round">cached</span> Regenerate Plan
+                                </button>
+                            </div>
+                            <p class="card-desc">Automatically rebuilds tasks targeting cognitive weaknesses and retention schedules.</p>
+                            
+                            <div class="planner-checklist" id="planner-schedule-checklist">
+                                <!-- Rendered dynamically by planner.js -->
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Focus Pomodoro and fatigue analyzer -->
+                        <div class="planner-pomodoro-card neumorphic-card">
+                            <h3>Focus Timer & Fatigue Guard</h3>
+                            <p class="card-desc font-12">Maintains cognitive stamina by pacing study sessions with adaptive intervals.</p>
+                            
+                            <div class="pomodoro-timer-container">
+                                <div class="pomodoro-circle-ring neumorphic-card">
+                                    <div class="pomodoro-glow-overlay" id="pomo-glow-state"></div>
+                                    <div class="pomodoro-time-display">
+                                        <span id="pomo-minutes">25</span>:<span id="pomo-seconds">00</span>
+                                    </div>
+                                    <div class="pomodoro-status" id="pomo-state-label">FOCUS SESSION</div>
+                                </div>
+                            </div>
+
+                            <div class="pomodoro-controls">
+                                <button class="btn btn-primary" id="btn-pomo-start">
+                                    <span class="material-icons-round">play_arrow</span> Start Session
+                                </button>
+                                <button class="btn btn-secondary" id="btn-pomo-reset">
+                                    <span class="material-icons-round">restore</span> Reset
+                                </button>
+                            </div>
+
+                            <div class="fatigue-metrics-box neumorphic-inset">
+                                <h4>Fatigue Analysis Engine:</h4>
+                                <ul class="fatigue-stats">
+                                    <li>Continuous Learning: <strong id="pomo-stat-continuous">0m</strong></li>
+                                    <li>Attention Degradation: <strong id="pomo-stat-degrade">None Detected</strong></li>
+                                    <li>Action Recommended: <strong class="text-green" id="pomo-stat-recommend">Study normally</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 4. PROGRESS ANALYTICS VIEW -->
+                <section class="view-panel" id="view-analytics">
+                    <div class="analytics-layout">
+                        <!-- Top Mastery Row -->
+                        <div class="analytics-grid-full neumorphic-card">
+                            <h3>Topic Mastery Distribution</h3>
+                            <p class="card-desc">Current mastery levels measured from testing accuracy and retention rate.</p>
+                            
+                            <div class="mastery-grid-container" id="analytics-mastery-grid">
+                                <!-- Dynamic bars from analytics.js -->
+                            </div>
+                        </div>
+
+                        <!-- Left Column: Activity Chart -->
+                        <div class="analytics-col-7 neumorphic-card">
+                            <div class="chart-header">
+                                <h3>Weekly Brain Activity</h3>
+                                <div class="chart-selector neumorphic-inset">
+                                    <button class="active">XP Gain</button>
+                                    <button>Accuracy</button>
+                                </div>
+                            </div>
+                            <!-- Custom SVG Bar Graph -->
+                            <div class="svg-chart-container neumorphic-inset" id="activity-chart-container">
+                                <!-- Rendered dynamically by analytics.js -->
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Weak Topics & Logs -->
+                        <div class="analytics-col-5 neumorphic-card">
+                            <h3>Target Weak Points</h3>
+                            <p class="card-desc">Topics requiring reinforcement before proceeding with advanced modules.</p>
+                            
+                            <div class="weak-topics-list" id="analytics-weak-topics-list">
+                                <!-- Rendered dynamically -->
+                            </div>
+
+                            <div class="learning-insights neumorphic-inset">
+                                <h4>Learning Style Insight:</h4>
+                                <p id="learning-insight-paragraph">
+                                    You respond exceptionally well to **visual analogies** when confused. Your speed of recovery in "Binary Search Tree traversal" increased by **40%** after switching to guided hints.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 5. ACHIEVEMENTS VIEW -->
+                <section class="view-panel" id="view-achievements">
+                    <div class="achievements-layout">
+                        <!-- Progress XP Tracker -->
+                        <div class="achievements-banner-card neumorphic-card">
+                            <div class="banner-badge-wrapper">
+                                <span class="material-icons-round banner-medal">military_tech</span>
+                            </div>
+                            <div class="banner-text">
+                                <h2>Level <span id="level-title-large">4</span> Scholar</h2>
+                                <p>Progressing through advanced technical topics. Next level unlocks at 2,000 XP.</p>
+                                <div class="progress-details-wide">
+                                    <div class="progress-bar-large-wide neumorphic-inset">
+                                        <div class="progress-fill-large-wide fill-purple" style="width: 42%;" id="xp-progress-bar-large"></div>
+                                    </div>
+                                    <span class="xp-text"><strong id="current-xp-large">1420</strong>/2000 XP</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Badges Grid -->
+                        <h3 class="achievements-section-title">Earned Badges</h3>
+                        <div class="badges-grid" id="achievements-badges-grid">
+                            <!-- Populated dynamically by gamification.js -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification system for badge unlock or state change alerts -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Badge Unlocked Modal overlay -->
+    <div class="modal-overlay" id="badge-modal" style="display: none;">
+        <div class="badge-modal neumorphic-card">
+            <div class="badge-visual-wrapper">
+                <div class="badge-modal-ring">
+                    <span class="material-icons-round" id="modal-badge-icon">emoji_events</span>
+                </div>
+            </div>
+            <h2 id="modal-badge-title">Badge Unlocked!</h2>
+            <p class="badge-modal-desc" id="modal-badge-desc">You've shown extreme focus and completed your learning tasks without any errors!</p>
+            <button class="btn btn-primary mt-2" id="btn-close-modal">Awesome!</button>
+        </div>
+    </div>
+
+    <!-- Application JavaScript files -->
+    <script type="module" src="src/js/app.js"></script>
+</body>
+</html>
