@@ -54,7 +54,7 @@ Here is a visual walk-through of the AuraTutor workspace:
 
 ### 1. Main Chat Interface & Smart Tutor Workspace
 *Open-ended learning companion explaining concepts with dynamic subject suggestion chips.*
-![Main Chat Interface](screenshots/screenshot1.png)
+![Main Chat Interface](Screenshot 2026-06-13 181954.png)
 
 ### 2. Live Bio-Telemetry Logs & Stress Detector
 *Real-time biometrics feed logging user pacing, inactivity, error chains, and cognitive state shifts.*
