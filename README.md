@@ -147,37 +147,6 @@ If you want to run the exact wrapper that is deployed to Streamlit Cloud:
 
 ---
 
-## 🚀 Git Commands for GitHub
-
-To upload these files to your GitHub account:
-
-1. Initialize Git repository in the folder:
-   ```bash
-   git init
-   ```
-2. Add all files to commit staging:
-   ```bash
-   git add .
-   ```
-3. Commit files locally:
-   ```bash
-   git commit -m "feat: complete source code, screenshots, and documentation for AuraTutor"
-   ```
-4. Create a new repository on your GitHub account, copy the URL, and link it:
-   ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-   ```
-5. Rename branch and push:
-   ```bash
-   git branch -M main
-   ```
-6. Push changes:
-   ```bash
-   git push -u origin main
-   ```
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
