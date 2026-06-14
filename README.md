@@ -53,24 +53,19 @@ AuraTutor bridges **Neuromorphic UX Design** and **Cognitive Neuroscience Logic*
 Here is a visual walk-through of the AuraTutor workspace:
 
 ### 1. Main Chat Interface & Smart Tutor Workspace
-*Open-ended learning companion explaining concepts with dynamic subject suggestion chips.*
-![Main Chat Interface](Screenshot 2026-06-13 181954.png)
+*Open-ended learning companion explaining concepts with dynamic subject suggestion chips.
 
 ### 2. Live Bio-Telemetry Logs & Stress Detector
-*Real-time biometrics feed logging user pacing, inactivity, error chains, and cognitive state shifts.*
-![Bio-Telemetry & Stress Detector](screenshots/screenshot2.png)
+*Real-time biometrics feed logging user pacing, inactivity, error chains, and cognitive state shifts.
 
 ### 3. Concept Mastery Indicators & Performance Chart
-*Subject curriculum mastery indicators synchronized with a weekly activity engagement chart.*
-![Concept Mastery & Performance Chart](screenshots/screenshot3.png)
+*Subject curriculum mastery indicators synchronized with a weekly activity engagement chart.
 
 ### 4. Spaced Repetition Checklist & Attention Pomodoro Timer
-*Dynamic learning agenda showing status of key subject concepts alongside an attention-fatigue Pomodoro timer.*
-![Spaced Repetition & Pomodoro](screenshots/screenshot4.png)
+*Dynamic learning agenda showing status of key subject concepts alongside an attention-fatigue Pomodoro timer.
 
 ### 5. Gamification Rewards & Level Milestones
-*Unlockable Neumorphic achievements and badges highlighting learner habits and milestones.*
-![Gamification Rewards](screenshots/screenshot5.png)
+*Unlockable Neumorphic achievements and badges highlighting learner habits and milestones.
 
 ---
 
